@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <title>Book House</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: darkblue;
+        }
+        form {
+            width: 50%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form input, form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: darkblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        form button:hover {
+            background-color: purple;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book or Rent a House</h1><br><br>
+    <form id="bookingForm">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="tel" name="phone" placeholder="Phone" required />
+        
+        <!-- Dropdown for Book or Rent option -->
+        <select name="bookingType" required>
+            <option value="" disabled selected>Choose Book or Rent</option>
+            <option value="book">Book</option>
+            <option value="rent">Rent</option>
+        </select>
+        
+        <button type="submit">Submit Booking</button>
+    </form>
+
+    <script>
+        document.getElementById('bookingForm').onsubmit = async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries()); // Convert form data to JSON-like object
+
+            try {
+                const response = await fetch('/bookhome', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Send as JSON
+                    },
+                    body: JSON.stringify(data), // Convert object to JSON string
+                });
+
+                if (response.ok) {
+                    // If the booking is successful, show the popup
+                    alert("Booking Successful!");
+                } else {
+                    const errorMessage = await response.text();
+                    alert('Booking failed: ' + errorMessage);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during booking.');
+            }
+        };
+    </script>
+</body>
+</html>

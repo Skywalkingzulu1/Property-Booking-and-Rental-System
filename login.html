@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />   
+    <title>LOGININ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('images/homebg.jpg'); /* Use relative path */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the image */
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: darkblue;
+        }
+        .booking-details {
+            width: 50%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .booking-details h3 {
+            text-align: center; /* Center the heading */
+            margin-bottom: 20px; /* Space below the heading */
+            color: darkblue;
+        }
+        .booking-details span {
+            display: block; /* Ensure labels are on new lines */
+            margin-bottom: 5px; /* Spacing between label and input */
+            color: darkblue; /* Color for labels */
+        }
+        .booking-details input[type='text'],
+        .booking-details input[type='password'] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-row {
+            display: flex; /* Enable flexbox layout */
+            justify-content: space-between; /* Space buttons evenly */
+            margin-top: 10px; /* Add space above the button row */
+        }
+        .booking-details input[type='submit'],
+        .booking-details input[type='reset'] {
+            flex: 1; /* Allow buttons to grow equally */
+            padding: 10px;
+            background-color: darkblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+            margin: 0 5px; /* Add horizontal margin between buttons */
+        }
+        .booking-details input[type='submit']:hover,
+        .booking-details input[type='reset']:hover {
+            background-color: purple;
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+        .booking-details input[type='submit']:active,
+        .booking-details input[type='reset']:active {
+            transform: scale(0.95); /* Shrink slightly when clicked */
+        }
+        .booking-details a {
+            display: block; /* Ensure link is on a new line */
+            text-align: center; /* Center the link */
+            margin-top: 10px; /* Space above the link */
+            color: darkblue; /* Link color */
+            text-decoration: none; /* Remove underline */
+        }
+        .booking-details a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        /* Styles for the toggle password button */
+        #togglePassword {
+            background-color: darkblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 10px; /* Add margin above the button */
+            width: 100%; /* Full width */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+        }
+        #togglePassword:hover {
+            background-color: purple; /* Change color on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+        #togglePassword:active {
+            transform: scale(0.95); /* Shrink slightly when clicked */
+        }
+    </style>
+</head>
+
+<body>
+    <!--Header Starts HERE-->
+    <header class="header">
+        <div class="wrapper">
+            <h1>Loginin</h1>
+        </div>
+    </header>
+    <!--Header Ends HERE-->
+
+    <!--Main Body Starts HERE-->
+    <div class="main">
+        <div class="wrapper">
+            <!--Contact Detail Entry-->
+            <div class="booking-details">
+                <form>
+                    <span class="name">Username</span>
+                    <input type="text" name="username" placeholder="Username Please" required="true" />
+                    
+                    <span class="name">Password</span>
+                    <input type="password" name="password" placeholder="Password Please" required="true" />
+                    
+                    <div class="button-row">
+                        <input type="submit" name="submit" value="LOG IN" />
+                        <input type="reset" name="reset" value="RESET" />
+                    </div>
+                    
+                    <button type="button" id="togglePassword">Show Password</button> <!-- Added Show Password button -->
+                    
+                    <a href="index.html">Go Home</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Main Body Ends HERE-->
+
+
+    <!-- JavaScript Code -->
+    <script>
+        // Function to toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const toggleButton = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide Password';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show Password';
+            }
+        }
+
+        // Function to validate form inputs
+        function validateForm(event) {
+            const username = document.querySelector('input[name="username"]');
+            const password = document.querySelector('input[name="password"]');
+
+            if (username.value.trim() === '' || password.value.trim() === '') {
+                alert('Both fields are required!');
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+
+        // Attach event listeners when the DOM content is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.booking-details form');
+            form.addEventListener('submit', validateForm);
+
+            const toggleButton = document.getElementById('togglePassword');
+            toggleButton.onclick = togglePasswordVisibility; // Link toggle function
+        });
+    </script>
+</body>
+</html>

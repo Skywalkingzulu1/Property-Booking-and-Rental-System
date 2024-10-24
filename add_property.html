@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <title>Add New Property</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4; /* Light grey background */
+            line-height: 1.6; /* Improved readability */
+            color: #333; /* Default text color */
+        }
+
+        .wrapper {
+            width: 70%; /* Increase the width of the form */
+            max-width: 800px; /* Adjust max width for larger screens */
+            margin: 20px auto; /* Center the wrapper with vertical space */
+            padding: 20px; /* Internal padding for content */
+            background: white; /* White background for the form */
+            border-radius: 10px; /* Rounded corners for the form */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        /* Header Style */
+        .header {
+            color: white;
+            padding: 20px 0; /* Vertical padding for spacing */
+            text-align: center; /* Center the header text */
+        }
+
+        h1 {
+            color: darkblue; /* Change to dark blue for the header */
+            font-size: 2.5em; /* Larger font size for the title */
+            margin-bottom: 10px; /* Space below the heading */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
+        }
+
+        /* Form Styling */
+        form {
+            margin-top: 20px; /* Space above the form */
+        }
+
+        label {
+            display: block; /* Ensure labels are on new lines */
+            margin-bottom: 5px; /* Spacing between label and input */
+            color: darkblue; /* Dark blue color for labels */
+        }
+
+        input[type='text'],
+        input[type='tel'],
+        input[type='file'] {
+            width: 100%; /* Full width of the form */
+            padding: 10px; /* Internal padding for inputs */
+            margin: 10px 0; /* Margin around inputs */
+            border: 1px solid #ccc; /* Light grey border */
+            border-radius: 5px; /* Rounded corners */
+            transition: border-color 0.3s; /* Smooth transition for border color */
+        }
+
+        input[type='text']:focus,
+        input[type='tel']:focus,
+        input[type='file']:focus {
+            border-color: darkblue; /* Change border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        button {
+            width: 100%; /* Full width for the button */
+            padding: 10px; /* Padding for button */
+            background-color: darkblue; /* Button background color */
+            color: white; /* Button text color */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners for button */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-size: 16px; /* Font size for button */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+        }
+
+        button:hover {
+            background-color: purple; /* Darker blue on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        button:active {
+            transform: scale(0.95); /* Slightly shrink when clicked */
+        }
+
+        /* Footer Style */
+        .footer {
+            color: white; /* Text color */
+            text-align: center; /* Center text */
+            padding: 10px 0; /* Vertical padding */
+            width: 100%; /* Full width */
+        }
+
+        /* Image Preview Style */
+        #image-preview {
+            display: none; /* Hide by default */
+            max-width: 100%; /* Limit max width */
+            margin-top: 10px; /* Space above the image */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Light grey border */
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="wrapper">
+            <h1>Add New Property</h1>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="wrapper">
+            <form id="property-form" enctype="multipart/form-data"> <!-- Add enctype for file uploads -->
+                <label for="user-name">User Name:</label>
+                <input type="text" id="user-name" name="userName" required />
+
+                <label for="user-contact">User Contact:</label>
+                <input type="tel" id="user-contact" name="userContact" pattern="[0-9]{10}" required placeholder="1234567890" />
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required />
+
+                <label for="property-image">Upload Image (PNG/JPG):</label>
+                <input type="file" id="property-image" name="property-image" accept=".png, .jpg, .jpeg" required onchange="previewImage(event)" />
+
+                <img id="image-preview" alt="Image Preview" />
+
+                <button type="submit">Add Property</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="wrapper">
+            <p>&copy; <a href="#" style="color: white; text-decoration: underline;">House Rental System</a>. All rights reserved 2017.</p>
+        </div>
+    </footer>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result; // Set image source to preview
+                    preview.style.display = 'block'; // Show the preview
+                }
+                reader.readAsDataURL(file); // Read the file as a data URL
+            } else {
+                preview.style.display = 'none'; // Hide if no file
+            }
+        }
+
+        document.getElementById("property-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this); // Create FormData object from form
+
+            try {
+                const response = await fetch('/properties', {
+                    method: 'POST',
+                    body: formData // Send the FormData object directly
+                });
+
+                if (response.ok) {
+                    alert("Property added successfully!");
+                    window.location.href = "index.html"; // Redirect after success
+                } else {
+                    const errorText = await response.text();
+                    alert("Error adding property: " + errorText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Error occurred while adding property.");
+            }
+        });
+    </script>
+</body>
+</html>
